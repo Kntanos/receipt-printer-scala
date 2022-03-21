@@ -24,7 +24,6 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       "Muffin Of The Day" -> 4.55
     )
   )
-
   "A ReceiptPrinter" should {
     "format a receipt" which {
       "contains the name, address and phone number of the cafe" in {
@@ -76,9 +75,10 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
             "Tea" -> 2,
             "Affogato" -> 1)
         )
-        printer.printItemsList should include ("1 x Cafe Latte    4.75")
-        printer.printItemsList should include ("2 x Tea    7.3")
-        printer.printItemsList should include ("1 x Affogato    14.8")
+        val order = printer.orderWithPrices
+        printer.printItemsList(order) should equal (f"""1 x Cafe Latte      4.75
+                                                 2 x Tea              7.3
+                                                 1 x Affogato        14.8""")
       }
     }
   }

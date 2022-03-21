@@ -26,16 +26,12 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map())
          if (item._1 == entry._1))
     yield (item._1, item._2, (item._2 * entry._2))
 
-  // create a formatting function and give it to map below?
-  val quantityFormat = "%1$-5s"
-  val itemFormat = "%1$-5s"
-  val totalFormat = "%10s"
-  val format: String = quantityFormat.concat(itemFormat).concat(totalFormat)
+  def itemToLine(line: (String, Int, Double)): String = {
+    f"${line._2} x ${line._1}%-10s${line._3}%10s"
+  }
 
-
-  val printItemsList: String =
-    orderWithPrices.map(item => printf(format, item._1, item._2, item._3)).mkString("\n")
-//      s"${item._2} x ${item._1} ${item._3}\n").mkString("")
+  def printItemsList(listOfItems: Iterable[(String, Int, Double)]): String =
+    listOfItems.map(itemToLine).mkString("\n")
 
   val totalPrice: Double =
     orderWithPrices.foldLeft(0.0)((total, order) => total + order._3)
@@ -48,9 +44,8 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map())
   def receipt: String = {
     s"""${cafeInfo}
     ${dateAndTime}
-    ${printItemsList}
+    ${printItemsList(orderWithPrices)}
     Total ${totalPrice}
     VAT ${vatAdded}"""
   }
-  println(receipt)
 }
