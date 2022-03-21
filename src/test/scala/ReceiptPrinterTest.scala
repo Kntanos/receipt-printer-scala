@@ -1,6 +1,8 @@
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
+import java.time.{Clock, Instant, ZoneId}
+
 class ReceiptPrinterTest extends AnyWordSpec with Matchers {
   val coffeeConnectionCafe = new CafeDetails(
     "The Coffee Connection",
@@ -39,6 +41,17 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       }
     }
   }
+
+  "The dateAndTime" should {
+    "return a string of the current date and time" which {
+      "is formatted dd/MM/yyy HH:mm" in {
+
+        val clock = Clock.fixed(Instant.parse("2022-03-21T16:22:00.00Z"), ZoneId.systemDefault())
+        printer.dateAndTime(clock) should equal ("21/03/2022 16:22")
+      }
+    }
+  }
+
   "The orderWithPrices" should {
     "generate a list of tuples" which {
       "each contains the item, the units ordered and the total cost for the units" in {
@@ -49,17 +62,6 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       }
     }
   }
-//  "The printedItemsList" should {
-//    "format a list of the order" which {
-//      "contains the quantity, the name and cost of item times the quantity" in {
-//
-//        val order = printer.orderWithPrices
-//        printer.printItemsList(order) should equal (f"""1 x Cafe Latte      4.75
-//                                                        2 x Tea              7.3
-//                                                        1 x Affogato        14.8""")
-//      }
-//    }
-//  }
 
   "The totalPrice" should {
     "calculate the cost of the order" which {
@@ -80,12 +82,19 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
 
   println(printer.receipt)
 
-  //  "A ReceiptPrinter" should {
-  //    "format a receipt" which {
-  //      "contains the name, address and phone number of the cafe" in {
-  //
-  //        printer.receipt should equal ("The whole multiline string...")
-  //      }
-  //    }
-  //  }
+    "A ReceiptPrinter" should {
+      "format a receipt" which {
+        "contains the cafe's details, a list of all items, total and VAT" in {
+
+          val clock = Clock.fixed(Instant.parse("2022-03-21T16:22:00.00Z"), ZoneId.systemDefault())
+          printer.receipt should equal (f"""The Coffee Connection, 123 Lakeside Way, 16503600708
+                                           |21/03/2022 16:22
+                                           |1 x Cafe Latte      4.75
+                                           |2 x Tea              7.3
+                                           |1 x Affogato        14.8
+                                           |Total 26.85
+                                           |VAT 5.37""".stripMargin)
+        }
+      }
+    }
 }

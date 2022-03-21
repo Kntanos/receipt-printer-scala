@@ -1,4 +1,4 @@
-import java.time.{Instant, ZoneId}
+import java.time.{Clock, Instant, ZoneId}
 import java.time.format.DateTimeFormatter
 
 class CafeDetails (
@@ -11,10 +11,10 @@ class CafeDetails (
 class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map()) {
 
   val cafeInfo: String =
-    s"${cafe.shopName}, ${cafe.address}, ${cafe.phone}"
+    f"${cafe.shopName}, ${cafe.address}, ${cafe.phone}"
 
-  val dateAndTime: String = {
-    val instant = Instant.now()
+  def dateAndTime (clock: Clock = Clock.systemUTC()): String = {
+    val instant = Instant.now(clock)
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm").withZone(ZoneId.systemDefault())
     val formattedDate = formatter.format(instant)
     formattedDate
@@ -30,9 +30,6 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map())
     f"${line._2} x ${line._1}%-10s${line._3}%10s"
   }
 
-//  def printItemsList(listOfItems: Iterable[(String, Int, Double)]): String =
-//    listOfItems.map(itemToLine).mkString("")
-
   val totalPrice: Double =
     orderWithPrices.foldLeft(0.0)((total, order) => total + order._3)
 
@@ -42,10 +39,10 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map())
   }
 
   def receipt: String = {
-    s"""${cafeInfo}
-    |${dateAndTime}
-    |${orderWithPrices.map(itemToLine).mkString("\n")}
-    Total ${totalPrice}
-    VAT ${vatAdded}""".stripMargin
+    f"""${cafeInfo}
+       |${dateAndTime()}
+       |${orderWithPrices.map(itemToLine).mkString("\n")}
+       |Total ${totalPrice}
+       |VAT ${vatAdded}""".stripMargin
   }
 }
