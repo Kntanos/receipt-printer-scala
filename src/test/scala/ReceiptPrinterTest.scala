@@ -24,42 +24,33 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       "Muffin Of The Day" -> 4.55
     )
   )
-  "A ReceiptPrinter" should {
-    "format a receipt" which {
-      "contains the name, address and phone number of the cafe" in {
-        val printer = new ReceiptPrinter(
-          coffeeConnectionCafe,
-          Map("Cafe Latte" -> 1,
-              "Tea" -> 2,
-              "Affogato" -> 1)
-        )
-        printer.receipt should include ("The Coffee Connection, 123 Lakeside Way, 16503600708")
-      }
-      // add more tests here.
-    }
-  }
+  val printer = new ReceiptPrinter(
+    coffeeConnectionCafe,
+    Map("Cafe Latte" -> 1,
+      "Tea" -> 2,
+      "Affogato" -> 1)
+  )
+
+//  "A ReceiptPrinter" should {
+//    "format a receipt" which {
+//      "contains the name, address and phone number of the cafe" in {
+//
+//        printer.receipt should include ("The Coffee Connection, 123 Lakeside Way, 16503600708")
+//      }
+//    }
+//  }
   "The cafeInfo" should {
     "include details" which {
       "contains the name, address and phone number of the cafe" in {
-        val printer = new ReceiptPrinter(
-          coffeeConnectionCafe,
-          Map("Cafe Latte" -> 1,
-            "Tea" -> 2,
-            "Affogato" -> 1)
-        )
-        printer.cafeInfo should include ("The Coffee Connection, 123 Lakeside Way, 16503600708")
+
+        printer.cafeInfo should equal ("The Coffee Connection, 123 Lakeside Way, 16503600708")
       }
     }
   }
   "The orderWithPrices" should {
     "generate a list of tuples" which {
       "each contains the item, the units ordered and the total cost for the units" in {
-        val printer = new ReceiptPrinter(
-          coffeeConnectionCafe,
-          Map("Cafe Latte" -> 1,
-            "Tea" -> 2,
-            "Affogato" -> 1)
-        )
+
         printer.orderWithPrices should have size (3)
         printer.orderWithPrices.head._3 should equal (4.75)
         printer.orderWithPrices.tail.head._3 should equal (7.3)
@@ -69,28 +60,18 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
   "The printedItemsList" should {
     "format a list of the order" which {
       "contains the quantity, the name and cost of item times the quantity" in {
-        val printer = new ReceiptPrinter(
-          coffeeConnectionCafe,
-          Map("Cafe Latte" -> 1,
-            "Tea" -> 2,
-            "Affogato" -> 1)
-        )
+
         val order = printer.orderWithPrices
         printer.printItemsList(order) should equal (f"""1 x Cafe Latte      4.75
-                                                 2 x Tea              7.3
-                                                 1 x Affogato        14.8""")
+                                                        2 x Tea              7.3
+                                                        1 x Affogato        14.8""")
       }
     }
   }
   "The totalPrice" should {
     "calculate the cost of the order" which {
       "sums up the cost of all items" in {
-        val printer = new ReceiptPrinter(
-          coffeeConnectionCafe,
-          Map("Cafe Latte" -> 1,
-            "Tea" -> 2,
-            "Affogato" -> 1)
-        )
+
         printer.totalPrice should equal (26.85)
       }
     }
@@ -98,12 +79,7 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
   "The vatAdded" should {
     "calculate the added value tax" which {
       "is 20% of the total price of the order" in {
-        val printer = new ReceiptPrinter(
-          coffeeConnectionCafe,
-          Map("Cafe Latte" -> 1,
-            "Tea" -> 2,
-            "Affogato" -> 1)
-        )
+
         printer.vatAdded should equal (5.37)
       }
     }
