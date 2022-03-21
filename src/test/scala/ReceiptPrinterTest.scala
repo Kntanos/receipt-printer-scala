@@ -49,17 +49,17 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       }
     }
   }
-  "The printedItemsList" should {
-    "format a list of the order" which {
-      "contains the quantity, the name and cost of item times the quantity" in {
-
-        val order = printer.orderWithPrices
-        printer.printItemsList(order) should equal (f"""1 x Cafe Latte      4.75
-                                                        2 x Tea              7.3
-                                                        1 x Affogato        14.8""")
-      }
-    }
-  }
+//  "The printedItemsList" should {
+//    "format a list of the order" which {
+//      "contains the quantity, the name and cost of item times the quantity" in {
+//
+//        val order = printer.orderWithPrices
+//        printer.printItemsList(order) should equal (f"""1 x Cafe Latte      4.75
+//                                                        2 x Tea              7.3
+//                                                        1 x Affogato        14.8""")
+//      }
+//    }
+//  }
 
   "The totalPrice" should {
     "calculate the cost of the order" which {

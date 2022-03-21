@@ -30,8 +30,8 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map())
     f"${line._2} x ${line._1}%-10s${line._3}%10s"
   }
 
-  def printItemsList(listOfItems: Iterable[(String, Int, Double)]): String =
-    listOfItems.map(itemToLine).mkString("\n")
+//  def printItemsList(listOfItems: Iterable[(String, Int, Double)]): String =
+//    listOfItems.map(itemToLine).mkString("")
 
   val totalPrice: Double =
     orderWithPrices.foldLeft(0.0)((total, order) => total + order._3)
@@ -43,8 +43,9 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map())
 
   def receipt: String = {
     s"""${cafeInfo}
-    ${dateAndTime}\n${printItemsList(orderWithPrices)}
+    |${dateAndTime}
+    |${orderWithPrices.map(itemToLine).mkString("\n")}
     Total ${totalPrice}
-    VAT ${vatAdded}"""
+    VAT ${vatAdded}""".stripMargin
   }
 }
