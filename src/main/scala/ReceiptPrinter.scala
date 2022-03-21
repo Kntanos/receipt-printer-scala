@@ -8,12 +8,12 @@ class CafeDetails (
                     val prices: Map[String, Double]
                   )
 
-class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map()) {
+class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map(), val clock: Clock = Clock.systemUTC()) {
 
   val cafeInfo: String =
     f"${cafe.shopName}, ${cafe.address}, ${cafe.phone}"
 
-  def dateAndTime (clock: Clock = Clock.systemUTC()): String = {
+  def dateAndTime: String = {
     val instant = Instant.now(clock)
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm").withZone(ZoneId.systemDefault())
     val formattedDate = formatter.format(instant)
@@ -40,7 +40,7 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map())
 
   def receipt: String = {
     f"""${cafeInfo}
-       |${dateAndTime()}
+       |${dateAndTime}
        |${orderWithPrices.map(itemToLine).mkString("\n")}
        |Total ${totalPrice}
        |VAT ${vatAdded}""".stripMargin

@@ -30,7 +30,8 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
     coffeeConnectionCafe,
     Map("Cafe Latte" -> 1,
       "Tea" -> 2,
-      "Affogato" -> 1)
+      "Affogato" -> 1),
+    Clock.fixed(Instant.parse("2022-03-21T16:22:00.00Z"), ZoneId.systemDefault())
   )
 
   "The cafeInfo" should {
@@ -46,8 +47,7 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
     "return a string of the current date and time" which {
       "is formatted dd/MM/yyy HH:mm" in {
 
-        val clock = Clock.fixed(Instant.parse("2022-03-21T16:22:00.00Z"), ZoneId.systemDefault())
-        printer.dateAndTime(clock) should equal ("21/03/2022 16:22")
+        printer.dateAndTime should equal ("21/03/2022 16:22")
       }
     }
   }
@@ -86,7 +86,6 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       "format a receipt" which {
         "contains the cafe's details, a list of all items, total and VAT" in {
 
-          val clock = Clock.fixed(Instant.parse("2022-03-21T16:22:00.00Z"), ZoneId.systemDefault())
           printer.receipt should equal (f"""The Coffee Connection, 123 Lakeside Way, 16503600708
                                            |21/03/2022 16:22
                                            |1 x Cafe Latte      4.75
