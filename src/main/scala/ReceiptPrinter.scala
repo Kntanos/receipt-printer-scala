@@ -43,8 +43,7 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map())
 
   def receipt: String = {
     s"""${cafeInfo}
-    ${dateAndTime}
-    ${printItemsList(orderWithPrices)}
+    ${dateAndTime}\n${printItemsList(orderWithPrices)}
     Total ${totalPrice}
     VAT ${vatAdded}"""
   }

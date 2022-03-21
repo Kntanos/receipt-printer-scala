@@ -31,14 +31,6 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       "Affogato" -> 1)
   )
 
-//  "A ReceiptPrinter" should {
-//    "format a receipt" which {
-//      "contains the name, address and phone number of the cafe" in {
-//
-//        printer.receipt should include ("The Coffee Connection, 123 Lakeside Way, 16503600708")
-//      }
-//    }
-//  }
   "The cafeInfo" should {
     "include details" which {
       "contains the name, address and phone number of the cafe" in {
@@ -68,6 +60,7 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       }
     }
   }
+
   "The totalPrice" should {
     "calculate the cost of the order" which {
       "sums up the cost of all items" in {
@@ -84,4 +77,15 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
       }
     }
   }
+
+  println(printer.receipt)
+
+  //  "A ReceiptPrinter" should {
+  //    "format a receipt" which {
+  //      "contains the name, address and phone number of the cafe" in {
+  //
+  //        printer.receipt should equal ("The whole multiline string...")
+  //      }
+  //    }
+  //  }
 }
