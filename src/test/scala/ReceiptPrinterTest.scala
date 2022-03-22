@@ -52,16 +52,16 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
     }
   }
 
-  "The orderWithPrices" should {
-    "generate a list of tuples" which {
-      "each contains the item, the units ordered and the total cost for the units" in {
-
-        printer.orderWithPrices should have size (3)
-        printer.orderWithPrices.head._3 should equal (4.75)
-        printer.orderWithPrices.tail.head._3 should equal (7.3)
-      }
-    }
-  }
+//  "The orderWithPrices" should {
+//    "generate a list of tuples" which {
+//      "each contains the item, the units ordered and the total cost for the units" in {
+//
+//        printer.orderWithPrices should have size (3)
+//        printer.orderWithPrices.head._3 should equal (4.75)
+//        printer.orderWithPrices.tail.head._3 should equal (7.3)
+//      }
+//    }
+//  }
 
   "The totalPrice" should {
     "calculate the cost of the order" which {
@@ -88,9 +88,9 @@ class ReceiptPrinterTest extends AnyWordSpec with Matchers {
 
           printer.receipt should equal (f"""The Coffee Connection, 123 Lakeside Way, 16503600708
                                            |21/03/2022 16:22
-                                           |1 x Cafe Latte      4.75
-                                           |2 x Tea              7.3
-                                           |1 x Affogato        14.8
+                                           |1 x Cafe Latte           4.75
+                                           |2 x Tea                  7.30
+                                           |1 x Affogato             14.80
                                            |Total 26.85
                                            |VAT 5.37""".stripMargin)
         }

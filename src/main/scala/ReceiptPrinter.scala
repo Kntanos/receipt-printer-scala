@@ -20,20 +20,23 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map(),
     formattedDate
   }
 
-  val orderWithPrices: Iterable[(String, Int, Double)] =
-    for (item <- order;
-         entry <- cafe.prices;
-         if (item._1 == entry._1))
-    yield (item._1, item._2, (item._2 * entry._2))
+  val getPrice: (String, Int) => String = (itemName: String, quantity: Int) =>
+    "%.2f".format(cafe.prices(itemName) * quantity)
 
-  def itemToLine(line: (String, Int, Double)): String = {
-    f"${line._2} x ${line._1}%-10s${line._3}%10s"
+  val formatLine: (String, Int, String) => String = (itemName: String, quantity:Int, price: String) =>
+    f"$quantity x $itemName%-20s $price"
+
+  def mapOrder(orderToMap: Map[String, Int]): Iterable[String] = {
+    orderToMap map { case (k, v) => formatLine(k, v, getPrice(k, v))}
   }
 
-  val totalPrice: Double =
-    orderWithPrices.foldLeft(0.0)((total, order) => total + order._3)
+  val getPrices: (String, Int) => Double = (itemName: String, quantity: Int) =>
+    cafe.prices(itemName) * quantity
 
-  val vatAdded: Double = {
+  def totalPrice: Double =
+    (order map { case (k, v) => cafe.prices(k) * v}).sum
+
+  val vatAdded: (Double) = {
     val vat = totalPrice * 0.2
     Math.round(vat*100.0)/100.0
   }
@@ -41,7 +44,7 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map(),
   def receipt: String = {
     f"""${cafeInfo}
        |${dateAndTime}
-       |${orderWithPrices.map(itemToLine).mkString("\n")}
+       |${mapOrder(order).mkString("\n")}
        |Total ${totalPrice}
        |VAT ${vatAdded}""".stripMargin
   }
