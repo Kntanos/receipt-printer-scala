@@ -33,7 +33,7 @@ class ReceiptPrinter(val cafe: CafeDetails, var order: Map[String, Int] = Map(),
   val getPrices: (String, Int) => Double = (itemName: String, quantity: Int) =>
     cafe.prices(itemName) * quantity
 
-  def totalPrice: Double =
+  val totalPrice: Double =
     (order map { case (k, v) => cafe.prices(k) * v}).sum
 
   val vatAdded: (Double) = {
